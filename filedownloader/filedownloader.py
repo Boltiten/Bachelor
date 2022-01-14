@@ -1,4 +1,5 @@
 import requests
+import sys
 
 def download_file(url, filename=''):
     try:
@@ -18,6 +19,6 @@ def download_file(url, filename=''):
         return None
 
 
-downloadLink = 'https://open.spotify.com/episode/3QKDzetcvnP7rM8RozQS1W?si=2bc63abef9f044ec'
+downloadLink = sys.argv[1]
 
 download_file(downloadLink, 'C:\\Users\\Morten\\Desktop\\School\\Bachelor\\filedownloader\\downloaded\\joerogie')
