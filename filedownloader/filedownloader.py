@@ -21,4 +21,4 @@ def download_file(url, filename=''):
 
 downloadLink = sys.argv[1]
 
-download_file(downloadLink, 'C:\\Users\\Morten\\Desktop\\School\\Bachelor\\filedownloader\\downloaded\\joerogie')
+download_file(downloadLink, 'C:\\Users\\Morten\\Desktop\\School\\Bachelor\\filedownloader\\downloaded\\' + sys.argv[2])
