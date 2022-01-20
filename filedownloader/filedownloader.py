@@ -1,5 +1,6 @@
 import requests
 import sys
+from bs4 import BeautifulSoup
 
 def download_file(url, filename=''):
     try:
@@ -19,6 +20,6 @@ def download_file(url, filename=''):
         return None
 
 
-downloadLink = sys.argv[1]
+#downloadLink = sys.argv[1]
 
-download_file(downloadLink, 'C:\\Users\\Morten\\Desktop\\School\\Bachelor\\filedownloader\\downloaded\\' + sys.argv[2])
+#download_file(downloadLink, 'C:\\Users\\Morten\\Desktop\\School\\Bachelor\\filedownloader\\downloaded\\' + sys.argv[2])
