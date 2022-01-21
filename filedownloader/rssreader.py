@@ -9,15 +9,15 @@ downloadLocation = sys.argv[2] #'C:\\Users\\Morten\\Desktop\\School\\Bachelor\\f
 url = requests.get(xml)
 soup = BeautifulSoup(url.content, 'xml')
 
-entries = soup.find_all('item')
+entries = soup.find_all('item') #may also be named 'content' 'item' 'entry' 
 i = 0
 
 for entry in entries:
     title = entry.title.text
     #summary = entry.summary.text
-    link = entry.enclosure['url']
-    if not os.path.isfile(downloadLocation + str(i) + '.wav'):
-        download_file(link, downloadLocation + str(i) + '.wav')
+    link = entry.enclosure['url'] #may be named 'link' 'enclosure'
+    if not os.path.isfile(downloadLocation + title + '.wav'): #str(i)||title
+        download_file(link, downloadLocation + title + '.wav') #str(i)||title
         print(f"Title: {title}\n\nLink:{link}\n\n_______________________________________\n\n")
     else:
         print(f"Title:{title} Already Exist")
