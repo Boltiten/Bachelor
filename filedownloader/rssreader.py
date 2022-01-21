@@ -10,7 +10,7 @@ url = requests.get(xml)
 soup = BeautifulSoup(url.content, 'xml')
 
 entries = soup.find_all('item') #may also be named 'content' 'item' 'entry' 
-i = 0
+#i = 0
 
 for entry in entries:
     title = entry.title.text
@@ -21,5 +21,4 @@ for entry in entries:
         print(f"Title: {title}\n\nLink:{link}\n\n_______________________________________\n\n")
     else:
         print(f"Title:{title} Already Exist")
-    i = i +1
-
+    #i = i +1
