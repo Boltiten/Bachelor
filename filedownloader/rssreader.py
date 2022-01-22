@@ -13,10 +13,10 @@ entries = soup.find_all('item') #may also be named 'content' 'item' 'entry'
 
 for entry in entries:
     title = entry.title.text
-    #summary = entry.summary.text
     link = entry.enclosure['url'] #may be named 'link' 'enclosure'
-    if not os.path.isfile(downloadLocation + title + '.mp3'):
-        download_file(link, downloadLocation + title + '.mp3')
-        print(f"Title: {title}\n\nLink:{link}\n\n_______________________________________\n\n")
-    else:
-        print(f"Title:{title} Already Exist")
+    if ".mp3" in link:
+        if not os.path.isfile(downloadLocation + title + '.mp3'):
+            download_file(link, downloadLocation + title + '.mp3')
+            print(f"Title: {title}\n\nLink:{link}\n\n_______________________________________\n\n")
+        else:
+            print(f"Title:{title} Already Exist")
