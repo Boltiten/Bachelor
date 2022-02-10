@@ -8,6 +8,7 @@ noAdLoc = sys.argv[1]
 adLoc = sys.argv[2]
 #Example command for running the program
 # python AudioDiff.py "C:/Users/Thomas/Downloads/-tor-The EPA's Lies About Air Pollution Are Killing Americans.mp3" "C:/Users/Thomas/Downloads/-nor-The EPA's Lies About Air Pollution Are Killing Americans.mp3" 5000
+# Note that the last sysarg is for bytelenght of segemntations, and you need ad + noad folder ready before running
 noAdFrames = np.fromfile(noAdLoc, dtype='uint8')
 adFrames = np.fromfile(adLoc, dtype='uint8')
 fileCount = 0
@@ -28,8 +29,8 @@ def findMatchWindow(windowsize, shorterArr, longerArr, shortPos, longPos):
 def main():
     i=0
     y=0
-    pointArr = []
-    pointArr.append(getFileName(sys.argv[1]))
+    breakPointArr = []
+    breakPointArr.append(getFileName(sys.argv[1]))
     while i<len(noAdFrames):
         while((noAdFrames[i]==adFrames[y]) and i<len(noAdFrames) ):
             if(i+2>len(noAdFrames)):
@@ -40,40 +41,37 @@ def main():
         ret=findMatchWindow(10,noAdFrames,adFrames,i,y)
         if(not ret[1]):
             break
-        pointArr.append(y)
-        pointArr.append(ret[0])
+        breakPointArr.append(y)
+        breakPointArr.append(ret[0])
         y=ret[0]
         print(i," ",y)
-    file = open('adBreakpoints.csv','a', newline="")
+    csvFile = open('adBreakpoints.csv','a', newline="")
     fileString = getFileName(adLoc)
-    file2 = open(fileString,"wb")
-    file2.write(adFrames[pointArr[1]:(int)(pointArr[1]+(pointArr[2]-pointArr[1])/2)])
-    file2.close()
-    writer = csv.writer(file)
-    writer.writerow(pointArr)
-    file.close()
-    prev = 0
-    for i in range(1,(int)(len(pointArr))):
-        prev = splitAudio(int(sys.argv[3]),pointArr[i],pointArr[i+1],fileString,i,prev)
+    csvWriter = csv.writer(csvFile)
+    csvWriter.writerow(breakPointArr)
+    csvFile.close()
+    prevSegLen = 0
+    for i in range(1,(int)(len(breakPointArr))):
+        prevSegLen = splitAudio(int(sys.argv[3]),breakPointArr[i],breakPointArr[i+1],fileString,i,prevSegLen)
     print("done")
 
-def splitAudio(bitAmount,startpos,endpos,fileString,oddMeansAd,prevNumOfFSegemntation):
+def splitAudio(segmentBitLength,startpos,endpos,filenameString,oddMeansAd,prevNumOfFSegemntation):
     global fileCount
     fileBefore = fileCount
     if (oddMeansAd%2==1):
-        ranVar = range((int)((endpos-startpos)/bitAmount))
+        ranVar = range((int)((endpos-startpos)/segmentBitLength))
         folder = "ad/"
     else:
         ranVar = range(prevNumOfFSegemntation*2)
         folder = "noad/"
     print(ranVar)
     for i in ranVar:
-        file = open(folder+str(fileCount)+fileString,"wb")
+        file = open(folder+str(fileCount)+filenameString,"wb")
         fileCount = fileCount+1
-        pos=startpos+i*bitAmount
-        file.write(adFrames[pos:pos+bitAmount])
+        pos=startpos+i*segmentBitLength
+        file.write(adFrames[pos:pos+segmentBitLength])
         file.close()
-    file = open(fileString,"wb")
+    file = open(filenameString,"wb")
     return(fileCount-fileBefore)
 
 #For generating unique name for podcasts
