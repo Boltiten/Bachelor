@@ -1,3 +1,4 @@
+import pathlib
 import numpy as np
 import sys
 import csv
@@ -27,6 +28,7 @@ def main():
     i=0
     y=0
     pointArr = []
+    pointArr.append(getFileName(sys.argv[1]))
     while i<len(noAdFrames):
         while((noAdFrames[i]==adFrames[y]) and i<len(noAdFrames) ):
             if(i+2>len(noAdFrames)):
@@ -47,7 +49,10 @@ def main():
     writer.writerow(pointArr)
     file.close()
 
+def getFileName(filePath):
+    path = pathlib.PurePath(filePath)
+    return path.parent.parent.name+ "," + path.parent.name +","+ path.name
+
+
 if __name__ == "__main__":
     main()
-    
-    
