@@ -27,5 +27,3 @@ for path, subdir, files in os.walk("C:/Users/Thomas/Downloads/podcasts"):
                 Tor = Tor.replace("-"+foundLang+"-","-tor-")
                 print('python AudioDiff.py "' + Tor +'" "'+ fullName+'" '+ "50000")
                 os.system('python AudioDiff.py "' + Tor +'" "'+ fullName+'" '+ "50000")
-
-    
