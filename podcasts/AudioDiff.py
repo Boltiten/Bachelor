@@ -2,11 +2,12 @@ import pathlib
 import numpy as np
 import sys
 import csv
+import os
 #TODO unit tests
 noAdLoc = sys.argv[1]
 adLoc = sys.argv[2]
 #Example command for running the program
-# python AudioDiff.py "-tor-The EPA's Lies About Air Pollution Are Killing Americans.mp3" "-nor-The EPA's Lies About Air Pollution Are Killing Americans.mp3" 5000
+# python AudioDiff.py "-tor-The EPA's Lies About Air Pollution Are Killing Americans.mp3" "-nor-The EPA's Lies About Air Pollution Are Killing Americans.mp3" 50000
 # Note that the last sysarg is for bytelenght of segemntations, and you need ad + noad folder ready before running
 noAdFrames = np.fromfile(noAdLoc, dtype='uint8')
 adFrames = np.fromfile(adLoc, dtype='uint8')
@@ -62,9 +63,13 @@ def splitAudio(segmentBitLength,startpos,endpos,filenameString,oddMeansAd,prevNu
     fileBefore = fileCount
     if (oddMeansAd%2==1):
         ranVar = range((int)((endpos-startpos)/segmentBitLength))
+        if (not os.path.exists("ad")):
+            os.makedirs("ad")
         folder = "ad/"
     else:
         ranVar = range(prevNumOfFSegemntation*2)
+        if (not os.path.exists("noad")):
+            os.makedirs("noad")
         folder = "noad/"
     print(ranVar)
     for i in ranVar:
