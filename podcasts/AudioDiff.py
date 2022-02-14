@@ -1,90 +1,95 @@
-import pathlib
-import numpy as np
 import sys
+import re
 import csv
+import pathlib
 import os
-#TODO unit tests
-noAdLoc = sys.argv[1]
-adLoc = sys.argv[2]
-#Example command for running the program
-# python AudioDiff.py "-tor-The EPA's Lies About Air Pollution Are Killing Americans.mp3" "-nor-The EPA's Lies About Air Pollution Are Killing Americans.mp3" 50000
-# Note that the last sysarg is for bytelenght of segemntations, and you need ad + noad folder ready before running
-noAdFrames = np.fromfile(noAdLoc, dtype='uint8')
-adFrames = np.fromfile(adLoc, dtype='uint8')
-fileCount = 0
 
-#Finds an equal bytesequence for the two audio files
-def findMatchWindow(windowsize, shorterArr, longerArr, shortPos, longPos):
-    print(shortPos,"in loop")
-    print(shortPos/len(noAdFrames))
-    match = shorterArr[shortPos:(shortPos+windowsize)]
-    foundMatch=True
-    while(not (np.array_equal(longerArr[longPos:(windowsize+longPos)],match))):
-        longPos=longPos+1
-        if (longPos>len(longerArr)-windowsize):
-            foundMatch=False
-            break
-    return(longPos,foundMatch)
+adfile = open(sys.argv[2], 'rb').read()
+noadfile = open(sys.argv[1], 'rb').read()
 
-def main():
-    i=0
-    y=0
-    breakPointArr = []
-    breakPointArr.append(getFileName(sys.argv[2],"/"))
-    print(breakPointArr[0])
-    finished = False
-    while i<len(noAdFrames) or not finished:
-        while((noAdFrames[i]==adFrames[y]) and i<len(noAdFrames) ):
-            if(i+2>len(noAdFrames)):
-                print("finished")
-                finished = True
-                break
-            i=i+1
-            y=y+1
-        ret=findMatchWindow(100,noAdFrames,adFrames,i,y)
-        if(not ret[1]):
-            break
-        breakPointArr.append(y)
-        breakPointArr.append(ret[0])
-        y=ret[0]
-        print(i," ",y)
-    csvFile = open('adBreakpoints.csv','a', newline="")
-    fileString = getFileName(adLoc,",")
-    csvWriter = csv.writer(csvFile, delimiter="|")
-    csvWriter.writerow(breakPointArr)
-    csvFile.close()
-    prevSegLen = 0
-    for i in range(1,(int)(len(breakPointArr))-1):
-        prevSegLen = splitAudio(int(sys.argv[3]),breakPointArr[i],breakPointArr[i+1],fileString,i,prevSegLen)
-    print("done")
+print("Adfile: {} {} bytes".format(sys.argv[2],len(adfile)))
+print("Non adfile: {} {} bytes".format(sys.argv[1],len(noadfile)))
 
-def splitAudio(segmentBitLength,startpos,endpos,filenameString,oddMeansAd,prevNumOfFSegemntation):
-    global fileCount
-    fileBefore = fileCount
-    if (oddMeansAd%2==1):
-        ranVar = range((int)((endpos-startpos)/segmentBitLength))
+print("-"*40)
+
+assert(len(adfile) > len(noadfile))
+
+adadvance = 0
+noadadvance = 0
+adindex = 1
+diffarr=[]
+
+path = pathlib.PurePath(sys.argv[2])
+path.parent.name +","+ path.name
+fileString = path.parent.name +"/"+ path.name
+diffarr.append(fileString)
+while True:
+    xor = bytes(a ^ b for a, b in zip(adfile[adadvance:], noadfile[noadadvance:]))
+    matches = re.match(b'[\x00]*', xor)
+    advance = matches.end()
+
+    # Stop if we're at the end of the adfile
+    if advance + adadvance >= len(adfile) or advance + noadadvance >= len(noadfile):
+        csvFile = open('adBreakpoints.csv','a', newline="")
+        csvWriter = csv.writer(csvFile, delimiter="|")
+        csvWriter.writerow(diffarr)
+        csvFile.close()
+
         if (not os.path.exists("ad")):
             os.makedirs("ad")
-        folder = "ad/"
-    else:
-        ranVar = range(prevNumOfFSegemntation*2)
-        if (not os.path.exists("noad")):
             os.makedirs("noad")
-        folder = "noad/"
-    print(ranVar)
-    for i in ranVar:
-        file = open(folder+str(fileCount)+filenameString,"wb")
-        fileCount = fileCount+1
-        pos=startpos+i*segmentBitLength
-        file.write(adFrames[pos:pos+segmentBitLength])
-        file.close()
-    file = open(filenameString,"wb")
-    return(fileCount-fileBefore)
+
+        fileCount = 0
+        fileNameString = path.parent.name +","+ path.name
+        for i in range(1,len(diffarr)-1):
+            if (i%2==1):
+                folder = "ad/"
+            else: folder = "noad/"
+            
+            file = open(folder+str(fileCount)+fileNameString,"wb")
+            file.write(adfile[diffarr[i]:diffarr[i+1]])
+            file.close
+            fileCount = fileCount+1
+        print("Done.")
+        break
+    diffarr.append(advance+adadvance)
+    print("Diff at {} in {} from {} in {}".format(advance + adadvance,sys.argv[2], advance + noadadvance, sys.argv[1]))
+
+    adbegin = advance + adadvance
+    print("begin ad {}: {}".format(sys.argv[2], advance + adadvance))
+
+    print("search offset {} {} bytes".format(sys.argv[1], advance + noadadvance))
+
+    # Search for the next 512? bytes from noadfile in adfile
+    search = noadfile[advance + noadadvance:advance + noadadvance + 512]
+
+    print(search[0:16])
+    adadvance = adfile.index(search)
+    diffarr.append(adadvance)
+    print("end ad {}: {}".format(sys.argv[2], adadvance))
+    noadadvance += advance
+
+    print("-"*20)
 
 #For generating unique name for podcasts
 def getFileName(filePath,delimeter):
     path = pathlib.PurePath(filePath)
     return path.parent.name +delimeter+ path.name
 
-if __name__ == "__main__":
-    main()
+def splitAudio(segmentBitLength,startpos,endpos,filenameString,oddMeansAd):
+    global fileCount
+    if (oddMeansAd%2==1):
+        if (not os.path.exists("ad")):
+            os.makedirs("ad")
+        folder = "ad/"
+    else:
+        if (not os.path.exists("noad")):
+            os.makedirs("noad")
+        folder = "noad/"
+    for i in range((int)((endpos-startpos)/segmentBitLength)):
+        file = open(folder+str(fileCount)+filenameString,"wb")
+        fileCount = fileCount+1
+        pos=startpos+i*segmentBitLength
+        file.write(adfile[pos:pos+segmentBitLength])
+        file.close()
+    file = open(filenameString,"wb")
