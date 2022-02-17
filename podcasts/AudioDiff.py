@@ -73,7 +73,7 @@ while True:
     adadvance = adadvance+searchin.index(search)
     #Break if match not found because eof
     if(adadvance<adadvancePre+advance):
-        diffarr.append(len(adadvance-1))
+        diffarr.append(len(adfile-1))
         break
     diffarr.append(adadvance)
     print("end ad {}: {}".format(sys.argv[2], adadvance))
