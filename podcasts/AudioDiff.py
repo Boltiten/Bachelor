@@ -11,8 +11,10 @@ print("Adfile: {} {} bytes".format(sys.argv[2],len(adfile)))
 print("Non adfile: {} {} bytes".format(sys.argv[1],len(noadfile)))
 
 print("-"*40)
-
-assert(len(adfile) > len(noadfile))
+try:
+    assert(len(adfile) > len(noadfile))
+except:
+    quit()
 
 adadvance = 0
 noadadvance = 0
@@ -25,34 +27,14 @@ fileString = path.parent.name +"/"+ path.name
 diffarr.append(fileString)
 while True:
     xor = bytes(a ^ b for a, b in zip(adfile[adadvance:], noadfile[noadadvance:]))
+    print(str(noadadvance)+" "+str(adadvance))
     matches = re.match(b'[\x00]*', xor)
     advance = matches.end()
 
     # Stop if we're at the end of the adfile
     if advance + adadvance >= len(adfile) or advance + noadadvance >= len(noadfile):
-        csvFile = open('adBreakpoints.csv','a', newline="")
-        csvWriter = csv.writer(csvFile, delimiter="|")
-        csvWriter.writerow(diffarr)
-        csvFile.close()
-
-        if (not os.path.exists("ad")):
-            os.makedirs("ad")
-            os.makedirs("noad")
-
-        fileCount = 0
-        fileNameString = path.parent.name +","+ path.name
-        for i in range(1,len(diffarr)-1):
-            if (i%2==1):
-                folder = "ad/"
-            else: folder = "noad/"
-            
-            file = open(folder+str(fileCount)+fileNameString,"wb")
-            file.write(adfile[diffarr[i]:diffarr[i+1]])
-            file.close
-            fileCount = fileCount+1
-        print("Done.")
         break
-    diffarr.append(advance+adadvance)
+    diffarr.append(adadvance+advance)
     print("Diff at {} in {} from {} in {}".format(advance + adadvance,sys.argv[2], advance + noadadvance, sys.argv[1]))
 
     adbegin = advance + adadvance
@@ -64,12 +46,39 @@ while True:
     search = noadfile[advance + noadadvance:advance + noadadvance + 512]
 
     print(search[0:16])
-    adadvance = adfile.index(search)
+    searchin = adfile[adadvance:]
+    searchin.index(search)
+    adadvancePre = adadvance
+    adadvance = adadvance+searchin.index(search)
+    if(adadvance<adadvancePre+advance):
+        diffarr.append(len(adadvance-1))
+        break
     diffarr.append(adadvance)
     print("end ad {}: {}".format(sys.argv[2], adadvance))
     noadadvance += advance
 
     print("-"*20)
+csvFile = open('adBreakpoints.csv','a', newline="")
+csvWriter = csv.writer(csvFile, delimiter="|")
+csvWriter.writerow(diffarr)
+csvFile.close()
+
+if (not os.path.exists("ad")):
+    os.makedirs("ad")
+    os.makedirs("noad")
+
+fileCount = 0
+fileNameString = path.parent.name +","+ path.name
+for i in range(1,len(diffarr)-1):
+    if (i%2==1):
+        folder = "ad/"
+    else: folder = "noad/"
+            
+    file = open(folder+str(fileCount)+fileNameString,"wb")
+    file.write(adfile[diffarr[i]:diffarr[i+1]])
+    file.close
+    fileCount = fileCount+1
+print("Done.")
 
 #For generating unique name for podcasts
 def getFileName(filePath,delimeter):
