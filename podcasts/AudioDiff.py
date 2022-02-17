@@ -72,7 +72,6 @@ while True:
     print(search[0:16])
 
     searchin = adfile[adadvance:]
-    searchin.index(search)
 
     adadvancePre = adadvance
     adadvance = adadvance+searchin.index(search)
