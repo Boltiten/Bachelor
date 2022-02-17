@@ -14,6 +14,15 @@ print("-"*40)
 try:
     assert(len(adfile) > len(noadfile))
 except:
+    diffarr=[]
+    path = pathlib.PurePath(sys.argv[2])
+    path.parent.name +","+ path.name
+    fileString = path.parent.name +"/"+ path.name
+    diffarr.append(fileString)
+    csvFile = open('adBreakpoints.csv','a', newline="")
+    csvWriter = csv.writer(csvFile, delimiter="|")
+    csvWriter.writerow(diffarr)
+    csvFile.close()
     quit()
 
 adadvance = 0
@@ -69,13 +78,17 @@ if (not os.path.exists("ad")):
 
 fileCount = 0
 fileNameString = path.parent.name +","+ path.name
+
 for i in range(1,len(diffarr)-1):
     if (i%2==1):
         folder = "ad/"
     else: folder = "noad/"
-            
+    
     file = open(folder+str(fileCount)+fileNameString,"wb")
-    file.write(adfile[diffarr[i]:diffarr[i+1]])
+    if (i==0 and diffarr[1]>512):
+        file.write(adfile[:diffarr[1]])
+    else:
+        file.write(adfile[diffarr[i]:diffarr[i+1]])
     file.close
     fileCount = fileCount+1
 print("Done.")
@@ -84,21 +97,3 @@ print("Done.")
 def getFileName(filePath,delimeter):
     path = pathlib.PurePath(filePath)
     return path.parent.name +delimeter+ path.name
-
-def splitAudio(segmentBitLength,startpos,endpos,filenameString,oddMeansAd):
-    global fileCount
-    if (oddMeansAd%2==1):
-        if (not os.path.exists("ad")):
-            os.makedirs("ad")
-        folder = "ad/"
-    else:
-        if (not os.path.exists("noad")):
-            os.makedirs("noad")
-        folder = "noad/"
-    for i in range((int)((endpos-startpos)/segmentBitLength)):
-        file = open(folder+str(fileCount)+filenameString,"wb")
-        fileCount = fileCount+1
-        pos=startpos+i*segmentBitLength
-        file.write(adfile[pos:pos+segmentBitLength])
-        file.close()
-    file = open(filenameString,"wb")
