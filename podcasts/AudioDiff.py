@@ -40,7 +40,6 @@ except:
 
 adadvance = 0
 noadadvance = 0
-adindex = 1
 diffarr=[]
 
 path = pathlib.PurePath(sys.argv[2])
@@ -61,15 +60,12 @@ while True:
     diffarr.append(adadvance+advance)
     print("Diff at {} in {} from {} in {}".format(advance + adadvance,sys.argv[2], advance + noadadvance, sys.argv[1]))
 
-    adbegin = advance + adadvance
     print("begin ad {}: {}".format(sys.argv[2], advance + adadvance))
 
     print("search offset {} {} bytes".format(sys.argv[1], advance + noadadvance))
 
     # Search for the next 512? bytes from noadfile in adfile
     search = noadfile[advance + noadadvance:advance + noadadvance + 512]
-
-    print(search[0:16])
 
     searchin = adfile[adadvance:]
 
