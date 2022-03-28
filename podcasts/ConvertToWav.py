@@ -3,7 +3,6 @@ import subprocess
 
 rootdir = Path("C:\\Users\\Thomas\\Downloads\\podcasts")
 file_list = [f for f in rootdir.resolve().glob('**/*') if f.is_file()]
-print(rootdir.name)
 for file in file_list:
     print(file.name)
     name, ext = file.name.rsplit(".",1)
