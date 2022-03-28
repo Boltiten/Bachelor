@@ -9,7 +9,7 @@ downloadLocation = sys.argv[2] #'C:\\Users\\Morten\\Desktop\\School\\Bachelor\\f
 url = requests.get(xml)
 soup = BeautifulSoup(url.content, 'xml')
 
-entries = soup.find_all('item') #may also be named 'content' 'item' 'entry' 
+entries = soup.find_all('item') #may also be named 'content' 'item' 'entry'
 
 for entry in entries:
     title = entry.title.text
