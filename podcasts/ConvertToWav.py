@@ -1,10 +1,14 @@
-import os
-from pydub import AudioSegment
+from pathlib import Path
+import subprocess
 
-audio_files = os.listdir()
-
-for file in audio_files:
-    name, ext = os.path.splitext(file)
-    if ext == ".mp3":
-       mp3_sound = AudioSegment.from_mp3(file)
-       mp3_sound.export("{0}.wav".format(name), format="wav")
+rootdir = Path("C:\\Users\\Thomas\\Downloads\\podcasts")
+file_list = [f for f in rootdir.resolve().glob('**/*') if f.is_file()]
+print(rootdir.name)
+for file in file_list:
+    print(file.name)
+    name, ext = file.name.rsplit(".",1)
+    if ext == "mp3":
+        if name[0] == "-":
+            print(file.parent.name)
+            file.rename(file.parent.name+ "/"+ file.name.replace("-","",1))
+        subprocess.call(['ffmpeg', '-i',name+".mp3", name.replace(" ","")+".wav"])
