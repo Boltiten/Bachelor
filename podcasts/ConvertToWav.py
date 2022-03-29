@@ -7,6 +7,5 @@ for file in file_list:
     name, ext = file.name.rsplit(".",1)
     if ext == "mp3" and (file.parent.name=="ad" or file.parent.name == "noad"):
         if name[0] == "-":
-            print(file.parent.name)
             file.rename(file.parent.name+ "/"+ file.name.replace("-","",1))
         subprocess.call(['ffmpeg', '-i',name+".mp3", name.replace(" ","")+".wav"])
