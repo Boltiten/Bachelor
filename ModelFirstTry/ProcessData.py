@@ -26,12 +26,14 @@ genre = []
 directory = 'C:\\Users\\Morten\\Desktop\\School\\Bachelor\\ModelFirstTry\\Tool\\ænima'
 
 for song_name in os.listdir(directory):
-    song_pieces = prepare_song(directory + song_name)
+    song_pieces = prepare_song(directory + '/' + song_name)
     all_tracks += song_pieces
     genre += ([0]*len(song_pieces))
+    print(f"Finished: {song_name}")
 
 directory = 'C:\\Users\\Morten\\Desktop\\School\\Bachelor\\ModelFirstTry\\Tool\\Lateralus'
 for song_name in os.listdir(directory):
-    song_pieces = prepare_song(directory + song_name)
+    song_pieces = prepare_song(directory + '/' + song_name)
     all_tracks += song_pieces
     genre += ([0]*len(song_pieces))
+    print(f"Finished: {song_name}")
