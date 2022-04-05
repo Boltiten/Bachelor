@@ -46,11 +46,14 @@ while True:
     # Search for the next 512? bytes from noadfile in adfile
     search = noadfile[advance + noadadvance:advance + noadadvance + 512]
 
-    print(search[0:16])
+     print(search[0:16])
     searchin = adfile[adadvance:]
-    searchin.index(search)
     adadvancePre = adadvance
-    adadvance = adadvance+searchin.index(search)
+    try:
+        adadvance = adadvance+searchin.index(search)
+    except:
+        diffarr.append(len(adadvance-1))
+        break
     if(adadvance<adadvancePre+advance):
         diffarr.append(len(adadvance-1))
         break
