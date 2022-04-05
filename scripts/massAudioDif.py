@@ -32,7 +32,7 @@ for path, subdir, files in os.walk(LOCATION):
                 Tor = fullName.replace("-"+foundLang+"-","-tor-").replace(foundLangslash,"tor/")
                 Tor = Tor.replace("-"+foundLang+"-","-tor-")
                 Tor = LOCATION+ "/" + Tor
-                fullname = LOCATION+ "/" + fullname
+                fullName = LOCATION+ "/" + fullName
                 print('python '+audioDifLoc+ '/AudioDiff.py "' + Tor +'" "'+ fullName+'"')
                 os.system('python '+audioDifLoc+ '/AudioDiff.py "' + Tor +'" "'+ fullName+'"')
     
