@@ -9,7 +9,7 @@ try:
     csvList = csvList.values.tolist()
 except:
     csvList=[]
-os.chdir(os.getcwd)
+os.chdir(os.getcwd())
 os.chdir("..")
 os.chdir("podcasts")
 for path, subdir, files in os.walk(os.getcwd()):
