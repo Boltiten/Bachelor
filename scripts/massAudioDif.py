@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 LANGUAGES = ["nor","eng","de"]
+LOCATION = "E:/Podcasts/"
 try:
     data = pd.read_csv('adBreakpoints.csv',header=None,encoding='cp1252',sep="|").fillna
     data = data[0].str.split('|')[0]
@@ -8,11 +9,12 @@ try:
     csvList = csvList.values.tolist()
 except:
     csvList=[]
-os.chdir(os.path.dirname(os.path.realpath(__file__)))
+os.chdir(os.getcwd)
 os.chdir("..")
 os.chdir("podcasts")
 for path, subdir, files in os.walk(os.getcwd()):
     for name in files:
+        print(name)
         fullName = os.path.join(path,name)
         fullName = fullName.replace("\\","/")
         found = False
@@ -28,6 +30,8 @@ for path, subdir, files in os.walk(os.getcwd()):
             if (not fullName in csvList):
                 Tor = fullName.replace("-"+foundLang+"-","-tor-").replace(foundLangslash,"tor/")
                 Tor = Tor.replace("-"+foundLang+"-","-tor-")
+                Tor = LOCATION + Tor
+                fullName = LOCATION + Tor
                 print('python AudioDiff.py "' + Tor +'" "'+ fullName+'"')
                 os.system('python AudioDiff.py "' + Tor +'" "'+ fullName+'"')
 
