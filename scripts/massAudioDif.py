@@ -26,8 +26,6 @@ for path, subdir, files in os.walk(LOCATION):
             if (not fullName in csvList):
                 Tor = fullName.replace("-"+foundLang+"-","-tor-").replace(foundLangslash,"tor/")
                 Tor = Tor.replace("-"+foundLang+"-","-tor-")
-                Tor = LOCATION + Tor
-                fullName = LOCATION + Tor
                 print('python AudioDiff.py "' + Tor +'" "'+ fullName+'"')
                 os.system('python AudioDiff.py "' + Tor +'" "'+ fullName+'"')
 
