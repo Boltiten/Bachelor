@@ -4,9 +4,7 @@ import pandas as pd
 LANGUAGES = ["nor","eng","de"]
 LOCATION = "E:/Podcasts"
 
-currentfile=os.getcwd()
-
-currentfile = currentfile.replace("\\","/")
+currentfile = __file__.replace("\\","/")
 audioDifLoc = currentfile.replace("/scripts","/podcasts")
 
 try:
