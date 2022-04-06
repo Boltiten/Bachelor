@@ -4,6 +4,8 @@ import csv
 import pathlib
 import os
 
+LOCATION="E:podcasts/"
+
 adfile = open(sys.argv[2], 'rb').read()
 noadfile = open(sys.argv[1], 'rb').read()
 
@@ -46,23 +48,23 @@ while True:
     # Search for the next 512? bytes from noadfile in adfile
     search = noadfile[advance + noadadvance:advance + noadadvance + 512]
 
-     print(search[0:16])
+    print(search[0:16])
     searchin = adfile[adadvance:]
     adadvancePre = adadvance
     try:
         adadvance = adadvance+searchin.index(search)
     except:
-        diffarr.append(len(adadvance-1))
+        diffarr.append(len(adfile)-1)
         break
     if(adadvance<adadvancePre+advance):
-        diffarr.append(len(adadvance-1))
+        diffarr.append(len(adfile)-1)
         break
     diffarr.append(adadvance)
     print("end ad {}: {}".format(sys.argv[2], adadvance))
     noadadvance += advance
 
     print("-"*20)
-csvFile = open('adBreakpoints.csv','a', newline="")
+csvFile = open(LOCATION+'adBreakpoints.csv','a', newline="")
 csvWriter = csv.writer(csvFile, delimiter="|")
 csvWriter.writerow(diffarr)
 csvFile.close()
@@ -78,8 +80,9 @@ for i in range(1,len(diffarr)-1):
         folder = "ad/"
     else: folder = "noad/"
             
-    file = open(folder+str(fileCount)+fileNameString,"wb")
+    file = open(LOCATION+folder+str(fileCount)+fileNameString,"wb")
     file.write(adfile[diffarr[i]:diffarr[i+1]])
+    print("FILENAMESTRING: "+folder+str(fileCount)+fileNameString)
     file.close
     fileCount = fileCount+1
 print("Done.")
@@ -100,9 +103,9 @@ def splitAudio(segmentBitLength,startpos,endpos,filenameString,oddMeansAd):
             os.makedirs("noad")
         folder = "noad/"
     for i in range((int)((endpos-startpos)/segmentBitLength)):
-        file = open(folder+str(fileCount)+filenameString,"wb")
+        file = open(LOCATION+folder+str(fileCount)+filenameString,"wb")
         fileCount = fileCount+1
         pos=startpos+i*segmentBitLength
         file.write(adfile[pos:pos+segmentBitLength])
+        print("FILENAMESTRING: "+folder+str(fileCount)+filenameString)
         file.close()
-    file = open(filenameString,"wb")
