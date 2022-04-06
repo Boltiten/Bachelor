@@ -58,6 +58,7 @@ while True:
         break
     if(adadvance<adadvancePre+advance):
         diffarr.append(len(adfile)-1)
+        print("EOF")
         break
     diffarr.append(adadvance)
     print("end ad {}: {}".format(sys.argv[2], adadvance))
