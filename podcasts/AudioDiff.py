@@ -4,7 +4,7 @@ import csv
 import pathlib
 import os
 
-LOCATION="E:podcasts/"
+LOCATION="/media/morten/T7/Podcasts/"
 
 adfile = open(sys.argv[2], 'rb').read()
 noadfile = open(sys.argv[1], 'rb').read()

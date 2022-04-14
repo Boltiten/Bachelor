@@ -1,6 +1,6 @@
 from pathlib import Path, PurePath
 import subprocess
-LOCATION="D:/Podcasts"
+LOCATION="/media/morten/T7/Podcasts"
 rootdir=Path(LOCATION)
 #rootdir = Path(__file__).parent.parent.absolute() / "podcasts"
 file_list = [f for f in rootdir.resolve().glob('**/*') if f.is_file()]

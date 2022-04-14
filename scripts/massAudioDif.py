@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 LANGUAGES = ["nor","eng","de"]
-LOCATION = "E:/Podcasts"
+LOCATION = "/media/morten/T7/Podcasts"
 
 currentfile = os.path.dirname(os.path.abspath(__file__))
 currentfile = currentfile.replace("\\","/")
@@ -33,6 +33,6 @@ for path, subdir, files in os.walk(LOCATION):
                 Tor = Tor.replace("-"+foundLang+"-","-tor-")
                 Tor = LOCATION+ "/" + Tor
                 fullName = LOCATION+ "/" + fullName
-                print('python '+audioDifLoc+ '/AudioDiff.py "' + Tor +'" "'+ fullName+'"')
-                os.system('python '+audioDifLoc+ '/AudioDiff.py "' + Tor +'" "'+ fullName+'"')
+                print('python3 '+audioDifLoc+ '/AudioDiff.py "' + Tor +'" "'+ fullName+'"')
+                os.system('python3 '+audioDifLoc+ '/AudioDiff.py "' + Tor +'" "'+ fullName+'"')
     
