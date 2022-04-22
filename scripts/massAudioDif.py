@@ -1,6 +1,12 @@
 import os
 import pandas as pd
 LANGUAGES = ["nor","eng","de"]
+LOCATION = "/media/morten/T7/Podcasts"
+
+currentfile = os.path.dirname(os.path.abspath(__file__))
+currentfile = currentfile.replace("\\","/")
+audioDifLoc = currentfile.replace("/scripts","/podcasts")
+
 try:
     data = pd.read_csv('adBreakpoints.csv',header=None,encoding='cp1252',sep="|").fillna
     data = data[0].str.split('|')[0]
@@ -8,10 +14,7 @@ try:
     csvList = csvList.values.tolist()
 except:
     csvList=[]
-os.chdir(os.path.dirname(os.path.realpath(__file__)))
-os.chdir("..")
-os.chdir("podcasts")
-for path, subdir, files in os.walk(os.getcwd()):
+for path, subdir, files in os.walk(LOCATION):
     for name in files:
         fullName = os.path.join(path,name)
         fullName = fullName.replace("\\","/")
@@ -28,7 +31,8 @@ for path, subdir, files in os.walk(os.getcwd()):
             if (not fullName in csvList):
                 Tor = fullName.replace("-"+foundLang+"-","-tor-").replace(foundLangslash,"tor/")
                 Tor = Tor.replace("-"+foundLang+"-","-tor-")
-                print('python AudioDiff.py "' + Tor +'" "'+ fullName+'"')
-                os.system('python AudioDiff.py "' + Tor +'" "'+ fullName+'"')
-
+                Tor = LOCATION+ "/" + Tor
+                fullName = LOCATION+ "/" + fullName
+                print('python3 '+audioDifLoc+ '/AudioDiff.py "' + Tor +'" "'+ fullName+'"')
+                os.system('python3 '+audioDifLoc+ '/AudioDiff.py "' + Tor +'" "'+ fullName+'"')
     
