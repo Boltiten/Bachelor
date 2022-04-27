@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 LANGUAGES = ["nor","eng","de"]
-LOCATION = "/media/morten/T7/Podcasts"
+LOCATION = "D:/Podcasts"
 
 currentfile = os.path.dirname(os.path.abspath(__file__))
 currentfile = currentfile.replace("\\","/")
