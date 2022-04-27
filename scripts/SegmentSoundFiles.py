@@ -44,10 +44,10 @@ for podcast_name in os.listdir(directory):
 
 print(" ")
 
-np.save('podcast_segmented.npy',all_podcasts)
+np.save('AImodel/podcast_segmented.npy',all_podcasts)
 podcasts_segmented = np.load('podcast_segmented.npy')
 
-np.save('adBinary_segmented.npy',adBinary)
+np.save('AImodel/adBinary_segmented.npy',adBinary)
 adBinary_segmented = np.load('adBinary_segmented.npy')
 
 
