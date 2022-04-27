@@ -9,9 +9,10 @@ def cut_song(song):
     start = 0
     end = len(song)
     song_pieces = []
-    while start + 10000 < end:
-        song_pieces.append(song[start:start+10000])
-        start += 10000
+    skip = 5000
+    while start + skip < end:
+        song_pieces.append(song[start:start+skip])
+        start += skip
     return song_pieces
 
 def prepare_song(song_path):
@@ -44,10 +45,10 @@ for podcast_name in os.listdir(directory):
 
 print(" ")
 
-np.save('AImodel/podcast_segmented.npy',all_podcasts)
+np.save('AI/podcast_segmented.npy',all_podcasts)
 podcasts_segmented = np.load('podcast_segmented.npy')
 
-np.save('AImodel/adBinary_segmented.npy',adBinary)
+np.save('AI/adBinary_segmented.npy',adBinary)
 adBinary_segmented = np.load('adBinary_segmented.npy')
 
 
