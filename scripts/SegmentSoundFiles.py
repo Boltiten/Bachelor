@@ -28,7 +28,7 @@ def prepare_song(song_path):
 
 all_podcasts = []
 adBinary = []
-directory = 'D:/Podcasts/ad'
+directory = 'E:/Podcasts/ad'
 
 for podcast_name in os.listdir(directory):
     podcast = prepare_song(directory + '/' + podcast_name)
@@ -36,7 +36,7 @@ for podcast_name in os.listdir(directory):
     adBinary += ([1]*len(podcast))
     print(f"Finished: {podcast_name}")
 
-directory = 'D:/Podcasts/noadsmall'
+directory = 'E:/Podcasts/noadsmall'
 for podcast_name in os.listdir(directory):
     podcast = prepare_song(directory + '/' + podcast_name)
     all_podcasts += podcast
