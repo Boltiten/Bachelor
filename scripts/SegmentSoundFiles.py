@@ -25,7 +25,7 @@ def prepare_song(song_path):
     return list_matrices
 
 
-
+"""
 all_podcasts = []
 adBinary = []
 directory = 'E:/Podcasts/ad'
@@ -35,8 +35,8 @@ for podcast_name in os.listdir(directory):
     all_podcasts += podcast
     adBinary += ([1]*len(podcast))
     print(f"Finished: {podcast_name}")
-
-directory = 'E:/Podcasts/noadsmall'
+"""
+directory = 'E:/Podcasts/noad_vicegaming'
 for podcast_name in os.listdir(directory):
     podcast = prepare_song(directory + '/' + podcast_name)
     all_podcasts += podcast
@@ -46,10 +46,10 @@ for podcast_name in os.listdir(directory):
 print(" ")
 
 np.save('AI/podcast_segmented.npy',all_podcasts)
-podcasts_segmented = np.load('AI/podcast_segmented.npy')
+podcasts_segmented = np.load('AI/vicegaming_test_x_segmented.npy')
 
 np.save('AI/adBinary_segmented.npy',adBinary)
-adBinary_segmented = np.load('AI/adBinary_segmented.npy')
+adBinary_segmented = np.load('AI/vicegaming_test_y_segmented.npy')
 
 
 print((all_podcasts==podcasts_segmented).all())
