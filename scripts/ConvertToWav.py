@@ -1,7 +1,7 @@
 from pathlib import Path, PurePath
 import subprocess
 import os
-LOCATION="/media/morten/T7/Podcasts"
+LOCATION="D:/Podcasts"
 rootdir=Path(LOCATION)
 #rootdir = Path(__file__).parent.parent.absolute() / "podcasts"
 file_list = [f for f in rootdir.resolve().glob('**/*') if f.is_file()]
@@ -14,5 +14,6 @@ for file in file_list:
         print(LOCATION+"/"+file.parent.name+"/"+name.replace(" ","")+".wav")
         try:
             subprocess.call(['ffmpeg', '-i',file.resolve(), LOCATION+"/"+file.parent.name+"/"+name.replace(" ","")+".wav"])
+            os.remove(file)
         except:
             print("error handling file")
