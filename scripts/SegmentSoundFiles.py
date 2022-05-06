@@ -25,18 +25,18 @@ def prepare_song(song_path):
     return list_matrices
 
 
-"""
+
 all_podcasts = []
 adBinary = []
-directory = 'E:/Podcasts/ad'
+directory = 'D:/Podcasts/ad_vicegaming'
 
 for podcast_name in os.listdir(directory):
     podcast = prepare_song(directory + '/' + podcast_name)
     all_podcasts += podcast
     adBinary += ([1]*len(podcast))
     print(f"Finished: {podcast_name}")
-"""
-directory = 'E:/Podcasts/noad_vicegaming'
+
+directory = 'D:/Podcasts/noad_vicegaming'
 for podcast_name in os.listdir(directory):
     podcast = prepare_song(directory + '/' + podcast_name)
     all_podcasts += podcast
