@@ -22,8 +22,8 @@ def prepare_song(song_path):
     y,sr = librosa.load(song_path,sr=22050)
     song_pieces = cut_song(y)
     for song_piece in song_pieces:
-        melspectrogram = librosa.feature.melspectrogram(song_piece)
-        mfcc = librosa.feature.mfcc(y=y,sr=sr)
+        #melspectrogram = librosa.feature.melspectrogram(song_piece)
+        mfcc = librosa.feature.mfcc(y=song_piece,sr=sr)
         list_matrices.append(mfcc)
     return list_matrices
 
