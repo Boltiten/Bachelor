@@ -1,5 +1,7 @@
 from IPython.display import Audio
 import librosa
+import librosa.display
+import IPython.display
 import os
 import numpy as np
 import warnings
@@ -20,21 +22,16 @@ def prepare_song(song_path):
     y,sr = librosa.load(song_path,sr=22050)
     song_pieces = cut_song(y)
     for song_piece in song_pieces:
-        melspec = librosa.feature.melspectrogram(song_piece)
-        list_matrices.append(melspec)
+        #melspectrogram = librosa.feature.melspectrogram(song_piece)
+        mfcc = librosa.feature.mfcc(y=song_piece,sr=sr)
+        list_matrices.append(mfcc)
     return list_matrices
 
 
 
 all_podcasts = []
 adBinary = []
-directory = 'D:/Podcasts/ad_no_norwegian'
 
-for podcast_name in os.listdir(directory):
-    podcast = prepare_song(directory + '/' + podcast_name)
-    all_podcasts += podcast
-    adBinary += ([1]*len(podcast))
-    print(f"Finished: {podcast_name}")
 
 directory = 'D:/Podcasts/noadsmall'
 for podcast_name in os.listdir(directory):
@@ -43,13 +40,22 @@ for podcast_name in os.listdir(directory):
     adBinary += ([0]*len(podcast))
     print(f"Finished: {podcast_name}")
 
+directory = 'D:/Podcasts/ad'
+for podcast_name in os.listdir(directory):
+    podcast = prepare_song(directory + '/' + podcast_name)
+    all_podcasts += podcast
+    adBinary += ([1]*len(podcast))
+    print(f"Finished: {podcast_name}")
+
+
+
 print(" ")
 
-np.save('AI/norwegian_train_x.npy',all_podcasts)
-podcasts_segmented = np.load('AI/norwegian_train_x.npy')
+np.save('AI/mfcc_x.npy',all_podcasts)
+podcasts_segmented = np.load('AI/mfcc_x.npy')
 
-np.save('AI/norwegian_train_y.npy',adBinary)
-adBinary_segmented = np.load('AI/norwegian_train_y.npy')
+np.save('AI/mfcc_y.npy',adBinary)
+adBinary_segmented = np.load('AI/mfcc_y.npy')
 
 
 print((all_podcasts==podcasts_segmented).all())
