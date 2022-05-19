@@ -1,8 +1,10 @@
 # Bachelor
 
-There are X steps for running the model.
+There are 3 main steps for running the model.
 
-First you need an rss feed
+First you need data.
+Then you must process the data.
+Finally you train on the data.
 
 
 
