@@ -26,7 +26,10 @@ ________________________________________________________________________________
 Run massAudioDif.py to segment the audio into ads and podcasts
 Run ConvertToWav.py to convert segments into wave format, this better for the data later.
 
-This is an important break, here you will have to balanse the dataset such that you do not have a over representation of podcast compared to advertisements.
+Both massAudioDif.py and ConvertToWav.py needs the location of the podcasts as an argument, for example:
+python3 ConvertToWav.py "D:/Podcasts"
+
+This is an important break, here you will have to balance the dataset such that you do not have a over representation of podcast compared to advertisements.
 The data can be up to 95% podcast, so you will have to chose some to remove from the training set.
 You can also chose very spesific data to keep here, for example only all the english advertisements, this is useful for checking generalization.
 
