@@ -1,16 +1,15 @@
-from pathlib import Path, PurePath
+from pathlib import Path
 import subprocess
 import os
-LOCATION="D:/Podcasts"
+import sys
+#running example: python3 ConvertToWav.py "D:/Podcasts"
+LOCATION=sys.argv[1]
 rootdir=Path(LOCATION)
-#rootdir = Path(__file__).parent.parent.absolute() / "podcasts"
 file_list = [f for f in rootdir.resolve().glob('**/*') if f.is_file()]
 for file in file_list:
     name, ext = file.name.rsplit(".",1)
+    #only converts in correctly labelled folders and checks whether allready converted
     if ext == "mp3" and (file.parent.name=="ad" or file.parent.name == "noad") and not os.path.exists(LOCATION+"/"+file.parent.name+"/"+name.replace(" ","")+".wav"):
-        #if name[0] == "-":
-            #print(file.parent.name)
-            #file.rename(file.parent.name+ "/"+ file.name.replace("-","",1))
         print(LOCATION+"/"+file.parent.name+"/"+name.replace(" ","")+".wav")
         try:
             subprocess.call(['ffmpeg', '-i',file.resolve(), LOCATION+"/"+file.parent.name+"/"+name.replace(" ","")+".wav"])
