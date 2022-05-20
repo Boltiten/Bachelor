@@ -4,10 +4,10 @@ import csv
 import pathlib
 import os
 
-LOCATION="D:/Podcasts/"
-
 adfile = open(sys.argv[2], 'rb').read()
 noadfile = open(sys.argv[1], 'rb').read()
+
+LOCATION=sys.argv[3] + "/"
 
 print("Adfile: {} {} bytes".format(sys.argv[2],len(adfile)))
 print("Non adfile: {} {} bytes".format(sys.argv[1],len(noadfile)))
